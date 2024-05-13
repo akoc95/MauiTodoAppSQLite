@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:TodoApp"
+             x:Class="TodoApp.MainPage">
+
+    <!-- Stiller -->
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style TargetType="Button">
+                <Setter Property="TextColor" Value="White" />
+            </Style>
+            <Style TargetType="Entry">
+                <Setter Property="TextColor" Value="White"/>
+            </Style>
+
+            
+            <Style TargetType="Frame">
+                <Setter Property="BackgroundColor" Value="LightGray"/>
+                <Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="Normal" />
+                            <VisualState x:Name="Selected">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor"
+                                        Value="DarkCyan"/>
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>
+            </Style>
+
+            <Style TargetType="ListView">
+                <Setter Property="BackgroundColor" Value="LightGray"/>
+                <Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="Normal" />
+                            <VisualState x:Name="Selected">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor"
+                            Value="DarkCyan"/>
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>
+            </Style>
+
+
+
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <!-- Scroll yapılabilir Layout -->
+    <ScrollView>
+        <FlexLayout Direction="Column" BackgroundColor="Azure">
+            <!-- Butonlar -->
+            <StackLayout Padding="10" Orientation="Horizontal" Spacing="5" Margin="10" HorizontalOptions="Center">
+                <Button x:Name="statusPage" Text="Durum Ekle" WidthRequest="150" HorizontalOptions="End" Clicked="statusPage_Clicked" BackgroundColor="SandyBrown"/>
+                <Button x:Name="tagPage" Text="Etiket Ekle" WidthRequest="150" HorizontalOptions="End" Clicked="tagPage_Clicked" BackgroundColor="DarkBlue"/>
+            </StackLayout>
+
+            <!-- Todo Veri Girişi -->
+            <VerticalStackLayout Padding="15" Margin="0">
+                <Entry x:Name="nameField" Placeholder="Todo adı giriniz" IsSpellCheckEnabled ="False"/>
+                <Entry x:Name="descriptionField" Placeholder="Açıklama giriniz" IsSpellCheckEnabled ="False"/>
+                <Picker x:Name="statusField" Title="Durum seçiniz" ItemDisplayBinding="{Binding Name}"/>
+
+                <CollectionView x:Name="tagField" SelectionMode="Multiple" ItemsLayout="VerticalGrid, 3" EmptyView="Etiket bulunamadı">
+                    <CollectionView.Header>
+                        <Label Text="Etiket seçimi yapınız" FontSize="20" HorizontalOptions="Center" Margin="0, 5, 0 , 10"/>
+                    </CollectionView.Header>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame Margin="2" InputTransparent="True" CornerRadius="6" >
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width=".2*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <VerticalStackLayout Grid.Column="1" Grid.Row="0" VerticalOptions="Center">
+                                        <Label Text="{Binding Name}" FontSize="Small" FontAttributes="Bold" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
+                                    </VerticalStackLayout>
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                <StackLayout>
+                    <Label Text="Tarih Seçiniz" Margin="5, 5, 0, 0" FontAttributes="Bold" FontSize="15"/>
+                    <DatePicker x:Name="dateField" Format="dd/MM/yyyy"/>
+                </StackLayout>
+                <Button x:Name="saveButton" Margin="0, 5, 0, 0" Text="Kaydet" Clicked="saveButton_Clicked" BackgroundColor="OrangeRed" />
+            </VerticalStackLayout>
+
+
+            <!-- Todo Listeleme -->
+            <VerticalStackLayout Padding="10" Margin="0, -10, 0, 0">
+                <ListView x:Name="listView" FlexLayout.Grow="1" HasUnevenRows="True" ItemTapped="listView_ItemTapped">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid x:Name="listGrid">
+                                    <StackLayout Spacing="10" Margin="0, 10, 0, 0" Padding="10" >
+                                        <Label Text="{Binding Name}" FontSize="18" FontAttributes="Bold"/>
+                                        <Label Text="{Binding Description}" FontSize="15" TextColor="#555555"/>
+                                        <StackLayout Orientation="Horizontal" Spacing="10">
+                                            <Label Text="{Binding StatusName, StringFormat='Durum: {0}'}" TextColor="#FF6347" FontSize="15"/>
+                                        </StackLayout>
+                                        <Label Text="{Binding TagNameAsString, StringFormat='Etiketler: {0} '}" FontSize="15" TextColor="#007BFF"/>
+                                        <Label Text="{Binding DateCreated, StringFormat='{0:dd/MM/yyyy}'}" FontSize="15" Margin="0, 0, 0, 10"/>
+                                    </StackLayout>
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </VerticalStackLayout>
+        </FlexLayout>
+    </ScrollView>
+</ContentPage>
